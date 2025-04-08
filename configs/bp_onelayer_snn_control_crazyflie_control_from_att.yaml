@@ -1,0 +1,94 @@
+logging: False
+plot_results: False
+device:
+  cuda
+
+wandb:
+  project: $YOUR INFO HERE$
+  entity: $YOUR INFO HERE$
+
+data:
+  dir: data/datasets
+  seq_length: 2500
+  inter_seq_dist: 200
+  target_shift: 0
+  n_repeats: 1
+  train_batch_size: 150
+  val_batch_size: 100
+  source: crazyflie
+  type: control
+  input_columns:
+    - controller.roll
+    - controller.pitch
+    - pid_attitude.yaw_output
+    - gyro.x
+    - gyro.y
+    - gyro.z
+    - stateEstimate.pitch
+    - stateEstimate.roll
+  target_columns:
+    - pid_rate.roll_output
+    - pid_rate.pitch_output
+    - pid_rate.yaw_output
+  input_scaling:
+    - 0.03
+    - 0.03
+    - 0.03
+    - 0.03
+    - 0.03
+    - 0.03 
+    - 0.05
+    - 0.05
+  target_scaling:
+    - 0.00005
+    - 0.00005
+    - 0.00005
+  remove_integral: True
+  remove_initial_value: False
+  target_integral: False
+
+# Training parameters
+train:
+  gens: 400  # generations
+  learning_rate: 0.004
+  optimizer: RAdam
+  loss: smooth_l1+pearson
+
+# Network
+net:
+  type: OneLayerRSNN
+  checkpoint: false
+  fix_weights: false
+  params:
+      l1:
+        synapse_ff:
+          out_features: 130
+          bias: false
+        synapse_rec:
+          out_features: 130
+          bias: false
+        neuron:
+          dynamics:
+            leak_i:
+            - 2.0
+            - 1.0
+            leak_v:
+            - 2.0
+            - 1.0
+            thresh:
+            - 1.0
+            - 0.0
+          learnable:
+          - leak_i
+          - leak_v
+          - thresh
+          spike_fn:
+            name: ArcTan
+            shape:
+            - 1.0
+            - 60.0
+      p_out:
+        synapse:
+          out_features: 3
+          bias: false
+        neuron: {}

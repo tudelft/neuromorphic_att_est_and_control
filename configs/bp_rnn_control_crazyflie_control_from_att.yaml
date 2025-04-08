@@ -1,0 +1,70 @@
+logging: True
+plot_results: False
+device:
+  cuda
+
+wandb:
+  project: $YOUR INFO HERE$
+  entity: $YOUR INFO HERE$
+
+data:
+  dir: data/datasets
+  output: eulers
+  rotate_yaw: False
+  normalization: minmax
+  seq_length: 2500
+  inter_seq_dist: 400
+  target_shift: 0
+  n_repeats: 1
+  train_batch_size: 100
+  val_batch_size: 100
+  frequency: 500
+  source: crazyflie
+  type: control
+  input_columns:
+    - controller.roll
+    - controller.pitch
+    - pid_attitude.yaw_output
+    - gyro.x
+    - gyro.y
+    - gyro.z
+    - stateEstimate.pitch
+    - stateEstimate.roll
+  target_columns:
+    - pid_rate.roll_output
+    - pid_rate.pitch_output
+    - pid_rate.yaw_output
+  input_scaling:
+    - 0.03
+    - 0.03
+    - 0.03
+    - 0.03
+    - 0.03
+    - 0.03 
+    - 0.05
+    - 0.05
+  target_scaling:
+    - 0.00005
+    - 0.00005
+    - 0.00005
+  remove_integral: False
+  remove_initial_value: True
+  target_integral: False
+
+# Training parameters
+train:
+  gens: 1000  # generations
+  learning_rate: 0.001
+  optimizer: Adam
+  loss: smooth_l1+pearson
+
+# Network
+net:
+  type: ANN
+  checkpoint: false
+  fix_weights: 10
+  params:
+      input_features: 8
+      hidden_features: 150
+      output_features: 3
+

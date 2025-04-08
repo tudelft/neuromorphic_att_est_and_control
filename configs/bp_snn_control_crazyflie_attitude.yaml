@@ -1,0 +1,93 @@
+logging: True
+plot_results: False
+device:
+  cuda
+
+wandb:
+  project: $YOUR INFO HERE$
+  entity: $YOUR INFO HERE$
+
+data:
+  dir: data/datasets
+  output: eulers
+  rotate_yaw: False 
+  normalization: minmax
+  seq_length: 2500
+  inter_seq_dist: 400
+  target_shift: 2
+  n_repeats: 1
+  train_batch_size: 100
+  val_batch_size: 40
+  frequency: 500
+  source: crazyflie
+  type: control
+  input_columns:
+    - gyro.x
+    - gyro.y
+    - gyro.z
+    - acc.x
+    - acc.y
+    - acc.z
+  target_columns:
+    - stateEstimate.pitch
+    - stateEstimate.roll
+  input_scaling:
+    - 0.01
+    - 0.01
+    - 0.01
+    - 1.0
+    - 1.0
+    - 0.3
+  target_scaling: 
+    - 0.05
+    - 0.05
+  remove_integral: False
+  remove_initial_value: False
+  target_integral: False  
+
+# Training parameters
+train:
+  gens: 400  # generations
+  learning_rate: 0.0005
+  optimizer: RAdam
+  loss: smooth_l1_skip_init
+
+# Network
+net:
+  checkpoint: youthful-leaf-301
+  type: RSNN
+  params:
+    l1:
+      synapse:
+        out_features: 150
+        bias: false
+      neuron:
+        dynamics:
+          leak_i: [2.0, 0.5]
+          leak_v: [2.0, 0.5]
+          thresh: [1.0, 0.0]
+        learnable: [leak_i, leak_v, thresh]
+        spike_fn:
+          name: ArcTan
+          shape: [1.0, 30.0]
+    l2:
+      synapse_ff:
+        out_features: 150
+        bias: false
+      synapse_rec:
+        out_features: 150
+        bias: false
+      neuron:
+        dynamics:
+          leak_i: [2.0, 0.5]
+          leak_v: [2.0, 0.5]
+          thresh: [1.0, 0.0]
+        learnable: [leak_i, leak_v, thresh]
+        spike_fn:
+          name: ArcTan
+          shape: [1.0, 30.0]
+    p_out:
+      synapse:
+        out_features: 2
+        bias: false
+      neuron: {}

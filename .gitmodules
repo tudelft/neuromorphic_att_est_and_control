@@ -1,0 +1,4 @@
+[submodule "spiking"]
+	path = spiking
+	url = https://github.com/tudelft/spiking/
+	branch = dev_ral
