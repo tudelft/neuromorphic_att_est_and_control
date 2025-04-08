@@ -1,10 +1,17 @@
 # Neuromorphic Attitude Estimation and Control
-This repository contains (links to) all code that is used in Neuromorphic Attitude Estimation and Control by S. Stroobants, C. de Wagter and G.C.H.E. de Croon. 
-
-### make sure to add submodules:
+This repository contains (links to) all code that is used in:\
+S. Stroobants, C. De Wagter and G. C. H. E. de Croon, "Neuromorphic Attitude Estimation and Control," in IEEE Robotics and Automation Letters, vol. 10, no. 5, pp. 4858-4865, May 2025, doi: 10.1109/LRA.2025.3553418.
 ```
-git submodule init
-git submodule update
+@ARTICLE{stroobants2025,
+  author={Stroobants, S. and De Wagter, C. and de Croon, G. C. H. E.},
+  journal={IEEE Robotics and Automation Letters}, 
+  title={Neuromorphic Attitude Estimation and Control}, 
+  year={2025},
+  volume={10},
+  number={5},
+  pages={4858-4865},
+  keywords={Neuromorphics;Quadrotors;Neurons;Attitude control;Training;Estimation;Robot sensing systems;Hardware;Artificial intelligence;Motors;Imitation learning;neurorobotics;machine learning for robot control},
+  doi={10.1109/LRA.2025.3553418}}
 ```
 
 ### Installation on WSL
@@ -12,6 +19,12 @@ git submodule update
 ```
 git clone git@github.com:tudelft/neuromorphic_att_est_and_control.git
 cd neuromorphic_att_est_and_control
+```
+
+#### make sure to add submodules:
+```
+git submodule init
+git submodule update
 ```
 
 #### Create a conda environment with requirements
@@ -24,14 +37,14 @@ pip install wandb
 pip install torch-directml
 ```
 
-### Install python package locally (and submodule)
+#### Install python package locally (and submodule)
 ```
 pip install -e .
 cd spiking
 pip install -e .
 ```
 
-### Get the data from the 4TU repository
+#### Get the data from the 4TU repository
 First create necessary folders:
 ```
 mkdir -p data/datasets/Train
@@ -44,7 +57,7 @@ https://data.4tu.nl/datasets/f474ef0a-6ef1-4ea1-a958-4827c4eadf60
 Download and unzip in the `data` folder. Make sure all three folders have at least 1 dataset.
 
 
-### Run example of SNN supervised BPTT
+#### Run example of SNN supervised BPTT
 Change the wandb parameters in the yaml file (`bp_onelayer_snn_control_crazyflie_control_from_att.yaml` is default).
 In the config file you can select the input / output columns and a linear scaling for each.  
 If logging in yaml is set to true, wandb will be used (be sure to initialize a project and insert your username).   
